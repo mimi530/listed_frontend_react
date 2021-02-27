@@ -1,9 +1,13 @@
 {
     "home": "Home",
     "register": "Rejestracja",
-    "login": "Logowanie",
+    "log_in": "Logowanie",
     "title": "Chcesz coś kupić? \"Have it LISTED\"",
     "subtitle": "Listed to aplikacja która pozwala ci tworzyć listy (np. zakupowe) a następnie dzielić je ze bliskimi abyście byli zorganizowani i na bierząco.",
     "mobile-app": "Apka mobilna!",
-    "footer": "Wszelkie prawa zastrzeżone."
+    "footer": "Wszelkie prawa zastrzeżone.",
+    "username": "Imię i nazwisko",
+    "password": "Hasło",
+    "password_confirm": "Potwierdź hasło",
+    "email": "E-mail"
 }

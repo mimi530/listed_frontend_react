@@ -1,9 +1,13 @@
 {
     "home": "Home",
     "register": "Sign Up",
-    "login": "Log In",
+    "log_in": "Log In",
     "title": "Wanna buy something? Have it LISTED",
     "subtitle": "Listed is an app which allows you to create all sorts of lists (for example shopping lists) and then share them with your friends and family so you can all stay organised and updated",
     "mobile-app": "Mobile app!",
-    "footer": "All rights reserved."
+    "footer": "All rights reserved.",
+    "username": "Name",
+    "password": "Password",
+    "password_confirm": "Confirm password",
+    "email": "E-mail"
 }

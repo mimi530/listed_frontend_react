@@ -14,7 +14,7 @@ function Welcome() {
                     <div className="columns is-vcentered has-text-centered">
                         <section className="column p-6">
                             <h1 className="title is-size-1 orange">
-                            {i18n.t('title')}
+                                {i18n.t('title')}
                             </h1>
                             <p className="subtitle is-size-3 has-text-white">
                                 {i18n.t('subtitle')}
