@@ -9,5 +9,6 @@
     "username": "Name",
     "password": "Password",
     "password_confirm": "Confirm password",
-    "email": "E-mail"
+    "email": "E-mail",
+    "logout": "Logout"
 }

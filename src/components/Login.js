@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import i18n from '../i18n'
 
-function LoginForm() {
+function Login() {
     
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -12,14 +12,17 @@ function LoginForm() {
         e.preventDefault();
         const data = {email, password};
         setIsPending(true);
-        axios.post('auth/login', data)
-        .then(response => {
-            console.log(response.data)
-            setIsPending(false)
-        }).catch(e => {
-            console.log(e);
-            setIsPending(false);
-        })
+        axios.post('auth/login', data).then(
+            response => {
+                console.log(response)
+                setIsPending(false)
+            }
+        ).catch(
+            error => {
+                console.log(error.response)
+                setIsPending(false)
+            }
+        )
     }
 
     return (
@@ -42,14 +45,12 @@ function LoginForm() {
                 </p>
             </div>
             <div className="field">
-                <p className="control">
-                    <button className={`button is-success is-medium mt-3 ${isPending ? 'is-loading' : ''}`}>
-                        {i18n.t('log_in')}
-                    </button>
-                </p>
+                <button className={`button is-success is-medium mt-3 ${isPending ? 'is-loading' : ''}`}>
+                    {i18n.t('log_in')}
+                </button>
             </div>
         </form>
     )
 }
 
-export default LoginForm
+export default Login

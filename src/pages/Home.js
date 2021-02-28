@@ -1,15 +1,31 @@
-import React from 'react'
-import Footer from '../components/Footer'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 
 function Home() {
+
+    const [lists, setLists] = useState([]);
+
+    useEffect(() => {
+        axios.get('lists').then(
+            response => {
+                console.log(response)
+            }
+        ).catch(
+            error => {
+                console.log(error)
+            }
+        )
+    },[])
+
     return (
         <>
-            <Navbar/>
+            <Navbar logged={true}/>
             <main>
-                Hello!
+                <div className="has-text-light has-background-dark">
+                    Hello!
+                </div>
             </main>
-            <Footer/>
         </>
     )
 }

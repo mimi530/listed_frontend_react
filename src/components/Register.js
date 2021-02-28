@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react'
 import i18n from '../i18n'
 
-function SignupForm() {
+function Register() {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -17,10 +17,6 @@ function SignupForm() {
         axios.post('auth/register', data)
         .then(response => {
             console.log(response.data)
-            setName('');
-            setEmail('');
-            setPassword('');
-            setPasswordConfirmation('');
             setIsPending(false)
         }).catch(e => {
             console.log(e);
@@ -74,4 +70,4 @@ function SignupForm() {
     )
 }
 
-export default SignupForm
+export default Register

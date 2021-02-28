@@ -9,5 +9,6 @@
     "username": "Imię i nazwisko",
     "password": "Hasło",
     "password_confirm": "Potwierdź hasło",
-    "email": "E-mail"
+    "email": "E-mail",
+    "logout": "Wyloguj"
 }

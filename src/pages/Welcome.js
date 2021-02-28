@@ -5,10 +5,11 @@ import phone from '../img/phone.png'
 import Footer from '../components/Footer'
 import i18n from '../i18n'
 
+
 function Welcome() {
     return (
         <>
-            <Navbar/>
+            <Navbar logged={false}/>
             <main className="has-background-dark">
                 <div className="container">
                     <div className="columns is-vcentered has-text-centered">
