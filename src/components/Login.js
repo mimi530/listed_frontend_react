@@ -1,6 +1,8 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+import { Redirect } from 'react-router-dom';
 import i18n from '../i18n'
+import { AuthContext } from './AuthContext';
 
 function Login() {
     
@@ -8,18 +10,24 @@ function Login() {
     const [password, setPassword] = useState('');
     const [isPending, setIsPending] = useState(false);
 
+    const authContext = useContext(AuthContext);
     const handleSubmit = (e) => {
         e.preventDefault();
         const data = {email, password};
         setIsPending(true);
         axios.post('auth/login', data).then(
             response => {
-                console.log(response)
-                setIsPending(false)
+                if(response.statusText === 'OK') {
+                    authContext.setIsAuth(true);
+                    authContext.setUsername(response.data[0].name);
+                    console.log(response.data)
+                    localStorage.setItem('remember', true);
+                    return <Redirect to="/home"/>
+                }
             }
         ).catch(
             error => {
-                console.log(error.response)
+                console.log(error)
                 setIsPending(false)
             }
         )

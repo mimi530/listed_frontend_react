@@ -6,7 +6,7 @@ import App from './App';
 import './i18n';
 
 const lang = localStorage.getItem('lang') || 'en';
-axios.defaults.baseURL = 'http://localhost/api/';
+axios.defaults.baseURL = 'http://localhost:8000/api/';
 axios.defaults.headers.common['Accept-Language'] = lang;
 axios.defaults.withCredentials = true;
 i18next.changeLanguage(lang);

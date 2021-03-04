@@ -1,15 +1,19 @@
 import axios from 'axios';
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import { Link } from 'react-router-dom';
 import i18n from '../i18n'
+import { AuthContext } from './AuthContext';
 import Login from './Login';
 import Register from './Register';
 
-function Navbar({logged}) {
+function Navbar() {
 
     const [isNavbar, setIsNavbar] = useState(false);
     const [isModal, setIsModal] = useState(null);
     const [isLang, setIsLang] = useState(false);
+    const [userDropdown, setUserDropdown] = useState(false);
+
+    const authContext = useContext(AuthContext);
 
     const handleLangChange = e => {
         localStorage.setItem('lang', e.target.innerHTML.toLowerCase());
@@ -17,12 +21,22 @@ function Navbar({logged}) {
     }
 
     const handleLogout = e => {
-        axios.post('auth/logout').then();
-
+        e.preventDefault();
+        axios.post('auth/logout').then(
+            response => {
+                authContext.setIsAuth(false);
+                authContext.setUsername('');
+                localStorage.removeItem('remember');
+            }
+        ).catch(
+            error => {
+                console.log(error)
+            }
+        )
     }
 
     return (
-        <nav className="navbar bg-orange p-2" role="navigation">
+        <nav className="navbar bg-orange p-2 is-fullwidth" role="navigation">
             <div className="navbar-brand">
                 <Link to="/" className="navbar-item has-text-dark is-size-3 has-text-weight-bold">
                     <img src="https://p7.hiclipart.com/preview/115/685/301/computer-icons-checklist-icon-design-list-vector.jpg" alt="logo" className="mr-2"></img>
@@ -39,25 +53,13 @@ function Navbar({logged}) {
             }>
                 <div className="navbar-end has-text-centered">
                     <div className="navbar-item">
-                        { !logged && <button className="button is-light" onClick={() => {setIsModal('signup')}}>
-                            <strong>{ i18n.t('register') }</strong> 
-                        </button> }
-                    </div>
-                    <div className="navbar-item">
-                        { !logged && <button className="button is-dark" onClick={() => {setIsModal('log_in')}}>
-                            { i18n.t('log_in') }
-                        </button> }
-                    </div>
-                    <div className="navbar-item">
-                        { logged && <Link to="/" className='button is-danger' onClick={handleLogout}>
-                            { i18n.t('logout') }
-                        </Link> }
-                    </div>
-                    <div className="navbar-item">
                         <div className={`dropdown is-right ${isLang ? 'is-active' : ''}`}>
                             <div className="dropdown-trigger " onClick={() => setIsLang(!isLang)}>
                                 <button className="button lang-picker bg-orange">
-                                    <strong><i className="fa fa-globe"></i> {i18n.language.toUpperCase()}</strong>
+                                    <strong>
+                                        <i className="fa fa-globe mr-1"></i>
+                                        {i18n.language.toUpperCase()}
+                                     </strong>
                                     <span className="icon is-small">
                                         <i className="fas fa-angle-down"></i>
                                     </span>
@@ -71,6 +73,45 @@ function Navbar({logged}) {
                             </div>
                         </div>
                     </div>
+                    { !authContext.isAuth &&
+                        <div className="navbar-item">
+                            <button className="button is-light" onClick={() => {setIsModal('signup')}}>
+                                <strong>{ i18n.t('register') }</strong> 
+                            </button>
+                        </div>
+                    }
+                    { !authContext.isAuth &&
+                        <div className="navbar-item">
+                            <button className="button is-dark" onClick={() => {setIsModal('log_in')}}>
+                                { i18n.t('log_in') }
+                            </button> 
+                        </div>
+                    }
+                    { authContext.isAuth &&
+                        <div className="navbar-item">
+                            <div className={`dropdown is-right ${userDropdown ? 'is-active' : ''}`}>
+                                <div className="dropdown-trigger " onClick={() => setUserDropdown(!userDropdown)}>
+                                    <button className="button lang-picker bg-orange">
+                                        <strong>
+                                            <i className="fa fa-user mr-2"></i>
+                                            {authContext.username}
+                                        </strong>
+                                        <span className="icon is-small">
+                                            <i className="fas fa-angle-down"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div className="dropdown-menu" id="dropdown-menu" role="menu">
+                                    <div className="dropdown-content">
+                                        <Link to="/" className="dropdown-item has-text-weight-bold" onClick={handleLogout}>
+                                            <i className="fa fa-sign-out-alt mr-2"></i>
+                                            { i18n.t('logout') }
+                                        </Link> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
             <div className={`modal ${isModal ? 'is-active' : ''}`}>

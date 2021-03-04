@@ -1,19 +1,47 @@
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Welcome from './pages/Welcome';
 import Home from './pages/Home';
-import Login from './components/Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import {AuthContext} from './components/AuthContext';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 function App() {
+
+  const [isAuth, setIsAuth] = useState();
+  const [username, setUsername] = useState();
+
+  useEffect(() => {
+    if(localStorage.getItem('remember')) {
+      axios.post('auth/me').then(
+        response => {
+          if(response.statusText==='OK') {
+            setIsAuth(true);
+            setUsername(response.data.name);
+          }
+        }
+      ).catch(
+        error => {
+          console.log(error);
+        }
+      )
+    }
+  }, []);
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Route exact path="/" component={Welcome}/>
-        <ProtectedRoute path="/home" component={Home} isAuth={true}/>
-        <Route path="/login" component={Login}/>
-      </BrowserRouter>
-    </div>
+    <AuthContext.Provider value={{isAuth, setIsAuth, username, setUsername}}>
+      <div className="App">
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/" component={Welcome}/>
+            <ProtectedRoute path="/home" component={Home}/>
+            <Route path="*" component={Welcome}/>
+          </Switch>
+            
+        </BrowserRouter>
+      </div>
+    </AuthContext.Provider>
   );
 }
 
