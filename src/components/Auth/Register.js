@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import i18n from '../i18n'
+import i18n from '../../i18n'
 
 function Register() {
 
@@ -62,7 +62,7 @@ function Register() {
             <div className="field">
                 <p className="control">
                     <button className={`button is-success is-medium mt-3 ${isPending ? 'is-loading' : ''}`}>
-                        {i18n.t('register')}
+                        {i18n.t('register_button')}
                     </button>
                 </p>
             </div>

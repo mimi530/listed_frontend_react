@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useState } from 'react'
 import { Redirect } from 'react-router-dom';
-import i18n from '../i18n'
+import i18n from '../../i18n'
 import { AuthContext } from './AuthContext';
 
 function Login() {
@@ -20,7 +20,6 @@ function Login() {
                 if(response.statusText === 'OK') {
                     authContext.setIsAuth(true);
                     authContext.setUsername(response.data[0].name);
-                    console.log(response.data)
                     localStorage.setItem('remember', true);
                     return <Redirect to="/home"/>
                 }
@@ -35,7 +34,7 @@ function Login() {
 
     return (
         <form onSubmit={handleSubmit}>
-            <h3 className="title mb-5 has-text-light">{i18n.t('log_in')}</h3>
+            <h3 className="title mb-5 has-text-light">{i18n.t('login')}</h3>
             <div className="field">
                 <p className="control has-icons-left">
                     <input type="email" name="email" className="input is-medium" placeholder={i18n.t('email')} autoFocus autoComplete="email" value={email} onChange={e => setEmail(e.target.value)} required/>
@@ -54,7 +53,7 @@ function Login() {
             </div>
             <div className="field">
                 <button className={`button is-success is-medium mt-3 ${isPending ? 'is-loading' : ''}`}>
-                    {i18n.t('log_in')}
+                    {i18n.t('login_button')}
                 </button>
             </div>
         </form>

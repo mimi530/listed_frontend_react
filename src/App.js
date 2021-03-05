@@ -2,8 +2,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Welcome from './pages/Welcome';
 import Home from './pages/Home';
-import ProtectedRoute from './components/ProtectedRoute';
-import {AuthContext} from './components/AuthContext';
+import ProtectedRoute from './components/Auth/ProtectedRoute';
+import {AuthContext} from './components/Auth/AuthContext';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -23,6 +23,8 @@ function App() {
         }
       ).catch(
         error => {
+          setIsAuth(false);
+          setUsername('');
           console.log(error);
         }
       )

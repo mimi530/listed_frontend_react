@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import i18n from '../i18n';
+import i18n from '../../i18n';
 
-export default function AddUser({list}) {
+export default function AddUser({list, setIsModal}) {
 
     const [email, setEmail] = useState('');
     const [isPending, setIsPending] = useState('');
@@ -15,6 +15,7 @@ export default function AddUser({list}) {
             response => {
                 if(response.statusText === 'OK') {
                     setIsPending(false);
+                    setIsModal(false);
                 }
             }
         ).catch(
@@ -27,7 +28,7 @@ export default function AddUser({list}) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <h3 className="title mb-5 has-text-light">ADD_USER</h3>
+            <h3 className="title mb-5 has-text-light">{i18n.t('add_user')}</h3>
             <div className="field">
                 <p className="control has-icons-left">
                     <input type="email" name="email" className="input is-medium" placeholder={i18n.t('email')} autoFocus value={email} onChange={e => setEmail(e.target.value)} required/>
@@ -38,7 +39,7 @@ export default function AddUser({list}) {
             </div>
             <div className="field">
                 <button className={`button is-success is-medium mt-3 ${isPending ? 'is-loading' : ''}`}>
-                    DODAJ_LISTE
+                    {i18n.t('add_user_button')}
                 </button>
             </div>
         </form>

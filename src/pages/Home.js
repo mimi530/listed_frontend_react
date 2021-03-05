@@ -1,15 +1,16 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
-import AddList from '../components/AddList';
-import { AuthContext } from '../components/AuthContext';
-import Item from '../components/Item';
-import List from '../components/List';
-import Navbar from '../components/Navbar'
+import AddList from '../components/List/AddList';
+import { AuthContext } from '../components/Auth/AuthContext';
+import Item from '../components/Item/Item';
+import List from '../components/List/List';
+import Navbar from '../components/Layout/Navbar'
+import i18n from '../i18n';
 
 function Home() {
 
     const [lists, setLists] = useState([]);
-    const [list, setList] = useState([]);
+    const [list, setList] = useState(null);
     const [items, setItems] = useState([]);
     const [isModal, setIsModal] = useState();
     const [showItems, setShowItems] = useState(false);
@@ -27,15 +28,15 @@ function Home() {
                 console.log(error)
             }
         )
-    }, [])
+    }, [items])
 
     const showListItems = id => {
+        setShowItems(true)
         axios.get('lists/'+id).then(
             response => {
                 if(response.statusText === 'OK') {
                     setList(response.data.list)
                     setItems(response.data.items)
-                    setShowItems(true)
                 }
             }
         ).catch(
@@ -48,19 +49,32 @@ function Home() {
 
     const handleAddItem = (e) => {
         e.preventDefault();
-        console.log(e)
         const item = {
             name: name,
             user: {
                 name: authContext.username
             }
         }
-        axios.post(`lists/${list.id}/items`, item);
         setItems(prevItems => [
             item,
             ...prevItems
         ])
         setName('')
+        e.target[0].focus();
+        axios.post(`lists/${list.id}/items`, item).then(
+            response => {
+                if(response.statusText === 'Created') {
+                    axios.get(`lists/${list.id}`).then(
+                        response => {
+                            if(response.statusText === 'OK') {
+                                setItems(response.data.items)
+                            }
+                            //TODO figure out a way to reduce renders
+                        }
+                    )
+                }
+            }
+        );
     }
 
     return (
@@ -68,20 +82,28 @@ function Home() {
             <Navbar/>
             <main>
                 <div className="columns p-3">
-                    <section className="column is-one-fifth">
+                    <section className="column is-3-desktop is-6-tablet">
                         <h1 className="title has-text-light has-text-centered">
-                            TWOJE_LISTY
+                            {i18n.t('lists')}
                         </h1>
                         <button className="button is-success is-fullwidth is-centered is-large" onClick={() => {setIsModal('addList')}}>
                             <i className="fa fa-plus mr-2"></i>
                         </button>
-                        { lists.length>0 && lists.map((list) => {
-                            return <List key={list.id} list={list} show={() => showListItems(list.id)} onClick={() => setShowItems(!showItems)}/>
+                        { lists && lists.map((list) => {
+                            return <List 
+                                key={list.id} 
+                                list={list} 
+                                show={() => showListItems(list.id)} 
+                                onClick={() => setShowItems(!showItems)} 
+                                setLists={setLists} 
+                                lists={lists}
+                                setList={setList}
+                            />
                         }
                         )}
                     </section>
-                    <section className="column has-text-light container is-5">
-                        {showItems && (
+                    <section className="column has-text-light container is-6">
+                        {list && (
                         <>
                             <h1 className="title has-text-light has-text-centered">
                                 {list.name}
@@ -89,10 +111,10 @@ function Home() {
                             <form onSubmit={handleAddItem} className="mb-5">
                                 <div className="field has-addons is-expanded">
                                     <p className="control is-expanded">
-                                        <input className="input is-large" type="text" placeholder="DODAJ_PRZEDMIOT" value={name} onChange={(e) => setName(e.target.value)}/>
+                                        <input className="input is-large" type="text" placeholder={i18n.t('add_item')} value={name} onChange={(e) => setName(e.target.value)}/>
                                     </p>
                                     <div className="control">
-                                        <button type="submit" className="button is-success is-large">
+                                        <button type="submit" className="button is-success is-large" title={i18n.t('add_item')}>
                                             <i className="fa fa-plus"></i>
                                         </button>
                                     </div>
@@ -100,7 +122,7 @@ function Home() {
                             </form>
                         </>
                         )}
-                        { showItems && 
+                        { list && 
                             items.map((item) => {
                                 return <Item key={item.id} list={list} item={item} items={items} setItems={setItems}/>
                             })

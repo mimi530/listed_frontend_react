@@ -1,10 +1,10 @@
-import axios from 'axios';
 import React, {useContext, useState} from 'react'
 import { Link } from 'react-router-dom';
-import i18n from '../i18n'
-import { AuthContext } from './AuthContext';
-import Login from './Login';
-import Register from './Register';
+import { AuthContext } from '../Auth/AuthContext';
+import Login from '../Auth/Login';
+import Logout from '../Auth/Logout';
+import Register from '../Auth/Register';
+import i18n from '../../i18n';
 
 function Navbar() {
 
@@ -18,21 +18,6 @@ function Navbar() {
     const handleLangChange = e => {
         localStorage.setItem('lang', e.target.innerHTML.toLowerCase());
         window.location.reload();
-    }
-
-    const handleLogout = e => {
-        e.preventDefault();
-        axios.post('auth/logout').then(
-            response => {
-                authContext.setIsAuth(false);
-                authContext.setUsername('');
-                localStorage.removeItem('remember');
-            }
-        ).catch(
-            error => {
-                console.log(error)
-            }
-        )
     }
 
     return (
@@ -75,15 +60,15 @@ function Navbar() {
                     </div>
                     { !authContext.isAuth &&
                         <div className="navbar-item">
-                            <button className="button is-light" onClick={() => {setIsModal('signup')}}>
-                                <strong>{ i18n.t('register') }</strong> 
+                            <button className="button is-info" onClick={() => {setIsModal('signup')}}>
+                                <strong>{ i18n.t('register_button') }</strong> 
                             </button>
                         </div>
                     }
                     { !authContext.isAuth &&
                         <div className="navbar-item">
-                            <button className="button is-dark" onClick={() => {setIsModal('log_in')}}>
-                                { i18n.t('log_in') }
+                            <button className="button is-success" onClick={() => {setIsModal('log_in')}}>
+                                { i18n.t('login_button') }
                             </button> 
                         </div>
                     }
@@ -103,10 +88,7 @@ function Navbar() {
                                 </div>
                                 <div className="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div className="dropdown-content">
-                                        <Link to="/" className="dropdown-item has-text-weight-bold" onClick={handleLogout}>
-                                            <i className="fa fa-sign-out-alt mr-2"></i>
-                                            { i18n.t('logout') }
-                                        </Link> 
+                                        <Logout/>
                                     </div>
                                 </div>
                             </div>

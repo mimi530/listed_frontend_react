@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
-import Navbar from '../components/Navbar'
+import Navbar from '../components/Layout/Navbar'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import phone from '../img/phone.png'
-import Footer from '../components/Footer'
+import Footer from '../components/Layout/Footer'
 import i18n from '../i18n'
-import { AuthContext } from '../components/AuthContext'
+import { AuthContext } from '../components/Auth/AuthContext'
 import { Redirect } from 'react-router-dom'
 
 function Welcome() {
@@ -30,7 +30,7 @@ function Welcome() {
                             </section>
                             <section className="column">
                                 <h1 className="is-size-1 subtitle mt-6 orange">
-                                    {i18n.t('mobile-app')}&nbsp;
+                                    {i18n.t('mobile_app')}&nbsp;
                                     <span className="icon-text">
                                         <i className="fas fa-arrow-down"></i>
                                     </span>
