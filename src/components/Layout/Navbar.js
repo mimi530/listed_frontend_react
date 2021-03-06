@@ -5,6 +5,7 @@ import Login from '../Auth/Login';
 import Logout from '../Auth/Logout';
 import Register from '../Auth/Register';
 import i18n from '../../i18n';
+import { Spring } from 'react-spring/renderprops';
 
 function Navbar() {
 
@@ -99,8 +100,32 @@ function Navbar() {
             <div className={`modal ${isModal ? 'is-active' : ''}`}>
                 <div className="modal-background" onClick={() => {setIsModal(null)}}></div>
                 <div className="modal-content box is-rounded has-background-dark py-5 px-5 has-text-centered">
-                    {isModal==='signup' && <Register setIsModal={setIsModal}/>}
-                    {isModal==='log_in' && <Login setIsModal={setIsModal}/>}
+                    {isModal==='signup' && 
+                        <Spring
+                            from={{opacity: 0}}
+                            to={{opacity: 1}}
+                            config={{duration: 700}}
+                        >
+                            {props => (
+                                <div style={props}>
+                                    <Register setIsModal={setIsModal} />
+                                </div>
+                            )}
+                        </Spring>
+                    }
+                    {isModal==='log_in' && 
+                        <Spring
+                            from={{opacity: 0}}
+                            to={{opacity: 1}}
+                            config={{duration: 700}}
+                        >
+                            {props => (
+                                <div style={props}>
+                                    <Login setIsModal={setIsModal}/>
+                                </div>
+                            )}
+                        </Spring>
+                    }
                 </div>
             </div>
         </nav>

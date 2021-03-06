@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { Spring } from 'react-spring/renderprops';
 import { toast } from 'react-toastify';
 import i18n from '../../i18n';
 import AddUser from './AddUser';
@@ -8,7 +9,7 @@ export default function List({list, show, setLists, lists, setList}) {
 
     const [isModal, setIsModal] = useState(false);
     const [editMode, setEditMode] = useState(false);
-    const [name, setName] = useState('');
+    const [name, setName] = useState(list.name);
     const [isPending, setIsPending] = useState(false);
 
     const handleListEdit = (e) => {
@@ -71,7 +72,7 @@ export default function List({list, show, setLists, lists, setList}) {
                     <form onSubmit={handleListEdit}>
                         <div className="field has-addons">
                             <p className={`control ${isPending ? 'is-loading' : ''}`}>
-                                <input defaultValue={list.name} onChange={(e) => setName(e.target.value)} name="name" className="input has-text-weight-bold subtitle is-6 is-size-6" autoFocus/>
+                                <input value={name} onChange={(e) => setName(e.target.value)} name="name" className="input has-text-weight-bold subtitle is-6 is-size-6" autoFocus/>
                             </p>
                             <p className="control">
                                 <button type="submit" className="button is-success">
@@ -111,7 +112,18 @@ export default function List({list, show, setLists, lists, setList}) {
         <div className={`modal ${isModal ? 'is-active' : ''}`}>
             <div className="modal-background" onClick={() => {setIsModal(null)}}></div>
             <div className="modal-content box is-rounded has-background-dark py-5 px-5 has-text-centered">
-                {isModal==='addList' && <AddUser list={list} setIsModal={setIsModal}/>}
+                {isModal==='addList' && <Spring
+                        from={{opacity: 0}}
+                        to={{opacity: 1}}
+                        config={{duration: 700}}
+                    >
+                        {props => (
+                            <div style={props}>
+                                <AddUser list={list} setIsModal={setIsModal}/>
+                            </div>
+                        )}
+                    </Spring>
+                }
             </div>
         </div>
         </>

@@ -7,6 +7,7 @@ import List from '../components/List/List';
 import Navbar from '../components/Layout/Navbar'
 import i18n from '../i18n';
 import { toast } from 'react-toastify';
+import { Spring } from 'react-spring/renderprops';
 
 function Home() {
 
@@ -82,15 +83,25 @@ function Home() {
                             <i className="fa fa-plus mr-2"></i>
                         </button>
                         { lists && lists.map((list) => {
-                            return <List 
-                                key={list.id} 
-                                list={list} 
-                                show={() => showListItems(list.id)} 
-                                onClick={() => setShowItems(!showItems)} 
-                                setLists={setLists} 
-                                lists={lists}
-                                setList={setList}
-                            />
+                            return <Spring
+                                from={{opacity: 0}}
+                                to={{opacity: 1}}
+                                config={{duration: 700}}
+                            >
+                                {props => (
+                                    <div style={props}>
+                                        <List 
+                                            key={list.id} 
+                                            list={list} 
+                                            show={() => showListItems(list.id)} 
+                                            onClick={() => setShowItems(!showItems)} 
+                                            setLists={setLists} 
+                                            lists={lists}
+                                            setList={setList}
+                                        />
+                                    </div>
+                                )}
+                            </Spring>
                         }
                         )}
                     </section>
@@ -100,23 +111,44 @@ function Home() {
                             <h1 className="title has-text-light has-text-centered">
                                 {list.name}
                             </h1>
-                            <form onSubmit={handleAddItem} className="mb-5">
-                                <div className="field has-addons is-expanded">
-                                    <p className="control is-expanded">
-                                        <input className="input is-large" type="text" placeholder={i18n.t('add_item')} value={name} onChange={(e) => setName(e.target.value)}/>
-                                    </p>
-                                    <div className="control">
-                                        <button type="submit" className="button is-success is-large" title={i18n.t('add_item')}>
-                                            <i className="fa fa-plus"></i>
-                                        </button>
+                            <Spring
+                                from={{opacity: 0}}
+                                to={{opacity: 1}}
+                                config={{duration: 700}}
+                            >
+                                {props => (
+                                    <div style={props}>
+                                        <form onSubmit={handleAddItem} className="mb-5">
+                                            <div className="field has-addons is-expanded">
+                                                <p className="control is-expanded">
+                                                    <input className="input is-large" type="text" placeholder={i18n.t('add_item')} value={name} onChange={(e) => setName(e.target.value)}/>
+                                                </p>
+                                                <div className="control">
+                                                    <button type="submit" className="button is-success is-large" title={i18n.t('add_item')}>
+                                                        <i className="fa fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                </div>
-                            </form>
+                                )}
+                            </Spring>
+                            
                         </>
                         )}
                         { list && 
                             items.map((item) => {
-                                return <Item key={item.id} list={list} item={item} items={items} setItems={setItems}/>
+                                return <Spring
+                                from={{opacity: 0}}
+                                to={{opacity: 1}}
+                                config={{duration: 700, delay:200}}
+                            >
+                                {props => (
+                                    <div style={props} className="mb-5">
+                                        <Item key={item.id} list={list} item={item} items={items} setItems={setItems}/>
+                                    </div>
+                                )}
+                            </Spring>
                             })
                         }
                     </section>
@@ -124,7 +156,19 @@ function Home() {
                 <div className={`modal ${isModal ? 'is-active' : ''}`}>
                     <div className="modal-background" onClick={() => {setIsModal(null)}}></div>
                     <div className="modal-content box is-rounded has-background-dark py-5 px-5 has-text-centered">
-                        {isModal==='addList' && <AddList lists={lists} setLists={setLists} modal={setIsModal}/>}
+                        {isModal==='addList' && 
+                        <Spring
+                            from={{opacity: 0}}
+                            to={{opacity: 1}}
+                            config={{duration: 700}}
+                        >
+                            {props => (
+                                <div style={props}>
+                                    <AddList lists={lists} setLists={setLists} modal={setIsModal}/>
+                                </div>
+                            )}
+                        </Spring>
+                    }
                     </div>
                 </div>
             </main>
