@@ -99,8 +99,8 @@ function Navbar() {
             <div className={`modal ${isModal ? 'is-active' : ''}`}>
                 <div className="modal-background" onClick={() => {setIsModal(null)}}></div>
                 <div className="modal-content box is-rounded has-background-dark py-5 px-5 has-text-centered">
-                    {isModal==='signup' && <Register/>}
-                    {isModal==='log_in' && <Login/>}
+                    {isModal==='signup' && <Register setIsModal={setIsModal}/>}
+                    {isModal==='log_in' && <Login setIsModal={setIsModal}/>}
                 </div>
             </div>
         </nav>

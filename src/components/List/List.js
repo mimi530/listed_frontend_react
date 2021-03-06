@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { toast } from 'react-toastify';
 import i18n from '../../i18n';
 import AddUser from './AddUser';
 
@@ -19,6 +20,7 @@ export default function List({list, show, setLists, lists, setList}) {
         axios.patch(`lists/${list.id}`, data).then(
             response => {
                 if(response.statusText === 'OK') {
+                    toast.success(response.data.message)
                     setList(response.data.list)
                     setEditMode(false)
                     setIsPending(false)
@@ -26,7 +28,7 @@ export default function List({list, show, setLists, lists, setList}) {
             }
         ).catch(
             error => {
-                console.log(error)
+                toast.error(error.response.data.message)
                 setIsPending(false)
             }
         )
@@ -38,6 +40,7 @@ export default function List({list, show, setLists, lists, setList}) {
             axios.delete(`lists/${list.id}`).then(
                 response => {
                     if(response.statusText === 'OK') {
+                        toast.success(response.data.message)
                         setList(null)
                         let newLists = lists.filter((oldlist) => oldlist.id !== list.id)
                         setLists(newLists)
@@ -45,7 +48,7 @@ export default function List({list, show, setLists, lists, setList}) {
                 }
             ).catch(
                 error => {
-                    console.log(error)
+                    toast.error(error.response.data.message)
                 }
             )
             

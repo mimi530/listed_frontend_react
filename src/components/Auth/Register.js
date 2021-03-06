@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { toast } from 'react-toastify';
 import i18n from '../../i18n'
 
-function Register() {
+function Register({setIsModal}) {
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -14,12 +15,16 @@ function Register() {
         e.preventDefault();
         setIsPending(true);
         const data = {name, email, password, password_confirmation};
-        axios.post('auth/register', data)
-        .then(response => {
-            console.log(response.data)
-            setIsPending(false)
-        }).catch(e => {
-            console.log(e);
+        axios.post('auth/register', data).then(
+            response => {
+                if(response.statusText === 'Created') {
+                    setIsPending(false)
+                    setIsModal(false)
+                    toast.success(response.data.message)
+                }
+            }
+        ).catch(error => {
+            toast.error(error.response.data.message)
             setIsPending(false);
         })
     }

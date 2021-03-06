@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify';
 import i18n from '../../i18n'
 import { AuthContext } from './AuthContext';
 
@@ -12,13 +13,14 @@ export default function Logout() {
         e.preventDefault();
         axios.post('auth/logout').then(
             response => {
+                toast.success(response.data.message)
                 authContext.setIsAuth(false);
                 authContext.setUsername('');
                 localStorage.removeItem('remember');
             }
         ).catch(
             error => {
-                console.log(error)
+                toast.error(error.response.data.message)
             }
         )
     }

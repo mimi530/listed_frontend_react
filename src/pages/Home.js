@@ -6,6 +6,7 @@ import Item from '../components/Item/Item';
 import List from '../components/List/List';
 import Navbar from '../components/Layout/Navbar'
 import i18n from '../i18n';
+import { toast } from 'react-toastify';
 
 function Home() {
 
@@ -25,10 +26,10 @@ function Home() {
             }
         ).catch(
             error => {
-                console.log(error)
+                toast.error(error.response.data.message)
             }
         )
-    }, [items])
+    }, [list])
 
     const showListItems = id => {
         setShowItems(true)
@@ -41,7 +42,7 @@ function Home() {
             }
         ).catch(
             error => {
-                console.log(error);
+                toast.error(error.response.data.message)
                 setShowItems(false)
             }
         )
@@ -61,18 +62,9 @@ function Home() {
         ])
         setName('')
         e.target[0].focus();
-        axios.post(`lists/${list.id}/items`, item).then(
-            response => {
-                if(response.statusText === 'Created') {
-                    axios.get(`lists/${list.id}`).then(
-                        response => {
-                            if(response.statusText === 'OK') {
-                                setItems(response.data.items)
-                            }
-                            //TODO figure out a way to reduce renders
-                        }
-                    )
-                }
+        axios.post(`lists/${list.id}/items`, item).catch(
+            error => {
+                toast.error(error.response.data.message)
             }
         );
     }

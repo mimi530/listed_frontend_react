@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useContext, useState } from 'react'
 import { Redirect } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import i18n from '../../i18n'
 import { AuthContext } from './AuthContext';
 
@@ -19,14 +20,15 @@ function Login() {
             response => {
                 if(response.statusText === 'OK') {
                     authContext.setIsAuth(true);
-                    authContext.setUsername(response.data[0].name);
+                    authContext.setUsername(response.data.user.name);
                     localStorage.setItem('remember', true);
+                    toast.success(response.data.message)
                     return <Redirect to="/home"/>
                 }
             }
         ).catch(
             error => {
-                console.log(error)
+                toast.error(error.response.data.message)
                 setIsPending(false)
             }
         )

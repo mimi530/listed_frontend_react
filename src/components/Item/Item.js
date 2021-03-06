@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useState } from 'react'
+import { toast } from 'react-toastify';
 import i18n from '../../i18n';
 import { AuthContext } from '../Auth/AuthContext';
 
@@ -25,7 +26,11 @@ export default function Item({list, item, items, setItems}) {
         } else {
             setItems([item, ...newItems])
         }
-        axios.patch('lists/'+list.id+'/items/'+item.id, data);
+        axios.patch('lists/'+list.id+'/items/'+item.id, data).catch(
+            error => {
+                toast.error(error.response.data.message)
+            }
+        );
     }
 
     const handleItemUpdate = (e) => {
@@ -39,6 +44,7 @@ export default function Item({list, item, items, setItems}) {
             response => {
                 if(response.statusText === 'OK') {
                     let newItems = items.filter((olditem) => olditem.id !== response.data.item.id);
+                    toast.success(response.data.message)
                     setIsPending(false)
                     setEditMode(false)
                     setItems([response.data.item, ...newItems])
@@ -46,7 +52,7 @@ export default function Item({list, item, items, setItems}) {
             }
         ).catch(
             error => {
-                console.log(error)
+                toast.error(error.response.data.message)
             }
         )
     }
@@ -56,13 +62,14 @@ export default function Item({list, item, items, setItems}) {
             axios.delete(`lists/${list.id}/items/${item.id}`).then(
                 response => {
                     if(response.statusText === 'OK') {
-                        let newItems = items.filter((olditem) => olditem.id !== response.data.item.id);
+                        toast.success(response.data.message)
+                        let newItems = items.filter((olditem) => olditem.id !== item.id);
                         setItems(newItems)
                     }
                 }
             ).catch(
                 error => {
-                    console.log(error)
+                    toast.error(error.response.data.message)
                 }
             )
             

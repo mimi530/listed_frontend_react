@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { toast } from 'react-toastify';
 import i18n from '../../i18n';
 
 function AddList({lists, setLists, modal}) {
@@ -14,6 +15,7 @@ function AddList({lists, setLists, modal}) {
         axios.post('lists', data).then(
             response => {
                 if(response.statusText === 'Created') {
+                    toast.success(response.data.message)
                     setLists(prevLists => [
                         response.data.list, ...prevLists 
                     ]);
@@ -23,7 +25,7 @@ function AddList({lists, setLists, modal}) {
             }
         ).catch(
             error => {
-                console.log(error);
+                toast.error(error.response.data.message)
                 setIsPending(false);
                 modal(false);
             }

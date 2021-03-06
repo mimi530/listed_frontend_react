@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react'
+import { toast } from 'react-toastify';
 import i18n from '../../i18n';
 
 export default function AddUser({list, setIsModal}) {
@@ -14,13 +15,14 @@ export default function AddUser({list, setIsModal}) {
         axios.patch(`lists/${list.id}`, data).then(
             response => {
                 if(response.statusText === 'OK') {
+                    toast.success(response.data.message)
                     setIsPending(false);
                     setIsModal(false);
                 }
             }
         ).catch(
             error => {
-                console.log(error);
+                toast.error(error.response.data.message)
                 setIsPending(false);
             }
         )
