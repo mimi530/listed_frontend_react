@@ -9,13 +9,17 @@ function Calculator() {
     const handleSubmit = (e) => {
         e.preventDefault()
         if(e.target.value === '-') {
-            setSum( prevSum => {
-                return prevSum - price
-            })
+            if(price) {
+                setSum( prevSum => {
+                    return prevSum - price
+                })
+            }
         } else if(e.target.value === '+') {
-            setSum( prevSum => {
-                return parseFloat(prevSum) + parseFloat(price)
-            })
+            if(price) {
+                setSum( prevSum => {
+                    return parseFloat(prevSum) + parseFloat(price)
+                })
+            }
         }
     }
 
