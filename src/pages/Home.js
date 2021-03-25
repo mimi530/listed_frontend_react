@@ -8,6 +8,7 @@ import Navbar from '../components/Layout/Navbar'
 import i18n from '../i18n';
 import { toast } from 'react-toastify';
 import { Spring } from 'react-spring/renderprops';
+import Calculator from '../components/Calculator';
 
 function Home() {
 
@@ -136,13 +137,14 @@ function Home() {
                             
                         </>
                         )}
+                        {list && <Calculator/>}
                         { list && 
                             items.map((item) => {
                                 return <Spring
                                 from={{opacity: 0}}
                                 to={{opacity: 1}}
                                 config={{duration: 700, delay:200}}
-                            >
+                                >
                                 {props => (
                                     <div style={props} className="mb-5">
                                         <Item key={item.id} list={list} item={item} items={items} setItems={setItems}/>
