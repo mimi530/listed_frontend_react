@@ -130,7 +130,7 @@ export default function Item({list, item, items, setItems}) {
                     }
                 </div>
             </div>
-            <p className="has-text-grey is-size-5 mb-3">{ item.description }</p>
+			<p className="has-text-grey is-size-5 mb-3">{ item.description }</p>
             {item.user.name === authContext.username && !editMode &&
             <>
                 <i className="fa fa-edit fa-lg has-text-info click-dark ml-3 mr-5 is-clickable" onClick={() => setEditMode(true)}></i>
