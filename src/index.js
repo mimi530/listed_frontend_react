@@ -6,7 +6,7 @@ import App from './App';
 import './i18n';
 
 const lang = localStorage.getItem('lang') || 'en';
-axios.defaults.baseURL = 'https://api.listed.mdomzalski.pl/api';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.headers.common['Accept-Language'] = lang;
 axios.defaults.withCredentials = true;
 i18next.changeLanguage(lang);
