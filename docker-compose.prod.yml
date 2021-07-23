@@ -7,13 +7,11 @@ services:
         expose: 
             - 80
         volumes:
-            - app:/app
+            - ./:/app
             - /node_modules
         environment: 
             VIRTUAL_HOST: listed.mdomzalski.pl,www.listed.mdomzalski.pl
         container_name: listed
-volumes:
-    app:
 networks:
     default:
         external:
