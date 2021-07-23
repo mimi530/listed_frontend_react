@@ -9,6 +9,8 @@ services:
         volumes:
             - ./:/app
             - /node_modules
+        environment: 
+            VIRTUAL_HOST: listed.mdomzalski.pl,www.listed.mdomzalski.pl
 networks:
     default:
         external:
