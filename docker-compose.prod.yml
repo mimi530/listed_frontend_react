@@ -4,13 +4,15 @@ services:
         build:
             context: ./
             dockerfile: Dockerfile.prod
-        ports:
-            - 3000:3000
+        expose: 
+            - 80
         volumes:
-            - ./:/app
+            - app:/app/build
             - /node_modules
         environment: 
             VIRTUAL_HOST: listed.mdomzalski.pl,www.listed.mdomzalski.pl
+volumes:
+    app:
 networks:
     default:
         external:
