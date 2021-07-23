@@ -1,16 +1,17 @@
 version: '3.7'
 services:
-    frontend:
+    listed:
         build:
             context: ./
             dockerfile: Dockerfile.prod
         expose: 
             - 80
         volumes:
-            - app:/app/build
+            - app:/app
             - /node_modules
         environment: 
             VIRTUAL_HOST: listed.mdomzalski.pl,www.listed.mdomzalski.pl
+        container_name: listed
 volumes:
     app:
 networks:
