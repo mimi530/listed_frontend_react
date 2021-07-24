@@ -6,9 +6,6 @@ services:
             dockerfile: Dockerfile.prod
         expose: 
             - 80
-        volumes:
-            - ./:/app
-            - /node_modules
         environment: 
             VIRTUAL_HOST: listed.mdomzalski.pl,www.listed.mdomzalski.pl
         container_name: listed
