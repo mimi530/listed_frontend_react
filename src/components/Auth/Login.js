@@ -19,6 +19,7 @@ function Login() {
         axios.post('auth/login', data).then(
             response => {
                 console.log('test')
+                console.log(response)
                 if (response.statusText === 'OK') {
                     authContext.setIsAuth(true);
                     console.log('test')
