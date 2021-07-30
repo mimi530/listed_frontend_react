@@ -35,9 +35,9 @@ function Home() {
 
     const showListItems = id => {
         setShowItems(true)
-        axios.get('lists/'+id).then(
+        axios.get('lists/' + id).then(
             response => {
-                if(response.statusText === 'OK') {
+                if (response.status === 200) {
                     setList(response.data.list)
                     setItems(response.data.items)
                 }
@@ -71,110 +71,178 @@ function Home() {
         );
     }
 
-    return (
-        <>
-            <Navbar/>
-            <main>
-                <div className="columns p-3">
-                    <section className="column is-3-desktop is-6-tablet">
-                        <h1 className="title has-text-light has-text-centered">
-                            {i18n.t('lists')}
-                        </h1>
-                        <button className="button is-success is-fullwidth is-centered is-large" onClick={() => {setIsModal('addList')}}>
-                            <i className="fa fa-plus mr-2"></i>
-                        </button>
-                        { lists && lists.map((list) => {
-                            return <Spring
-                                from={{opacity: 0}}
-                                to={{opacity: 1}}
-                                config={{duration: 700}}
-                            >
-                                {props => (
-                                    <div style={props}>
-                                        <List 
-                                            key={list.id} 
-                                            list={list} 
-                                            show={() => showListItems(list.id)} 
-                                            onClick={() => setShowItems(!showItems)} 
-                                            setLists={setLists} 
-                                            lists={lists}
-                                            setList={setList}
-                                        />
-                                    </div>
-                                )}
-                            </Spring>
+    return ( <
+        >
+        <
+        Navbar / >
+        <
+        main >
+        <
+        div className = "columns p-3" >
+        <
+        section className = "column is-3-desktop is-6-tablet" >
+        <
+        h1 className = "title has-text-light has-text-centered" > { i18n.t('lists') } <
+        /h1> <
+        button className = "button is-success is-fullwidth is-centered is-large"
+        onClick = {
+            () => { setIsModal('addList') }
+        } >
+        <
+        i className = "fa fa-plus mr-2" > < /i> < /
+        button > {
+            lists && lists.map((list) => {
+                return <Spring
+                from = {
+                    { opacity: 0 }
+                }
+                to = {
+                    { opacity: 1 }
+                }
+                config = {
+                        { duration: 700 }
+                    } > {
+                        props => ( <
+                            div style = { props } >
+                            <
+                            List key = { list.id }
+                            list = { list }
+                            show = {
+                                () => showListItems(list.id)
+                            }
+                            onClick = {
+                                () => setShowItems(!showItems)
+                            }
+                            setLists = { setLists }
+                            lists = { lists }
+                            setList = { setList }
+                            /> < /
+                            div >
+                        )
+                    } <
+                    /Spring>
+            })
+        } <
+        /section> <
+        section className = "column has-text-light container is-6" > {
+            list && ( <
+                >
+                <
+                h1 className = "title has-text-light has-text-centered" > { list.name } <
+                /h1> <
+                Spring from = {
+                    { opacity: 0 }
+                }
+                to = {
+                    { opacity: 1 }
+                }
+                config = {
+                    { duration: 700 }
+                } > {
+                    props => ( <
+                        div style = { props } >
+                        <
+                        form onSubmit = { handleAddItem }
+                        className = "mb-5" >
+                        <
+                        div className = "field has-addons is-expanded" >
+                        <
+                        p className = "control is-expanded" >
+                        <
+                        input className = "input is-large"
+                        type = "text"
+                        placeholder = { i18n.t('add_item') }
+                        value = { name }
+                        onChange = {
+                            (e) => setName(e.target.value)
                         }
-                        )}
-                    </section>
-                    <section className="column has-text-light container is-6">
-                        {list && (
-                        <>
-                            <h1 className="title has-text-light has-text-centered">
-                                {list.name}
-                            </h1>
-                            <Spring
-                                from={{opacity: 0}}
-                                to={{opacity: 1}}
-                                config={{duration: 700}}
-                            >
-                                {props => (
-                                    <div style={props}>
-                                        <form onSubmit={handleAddItem} className="mb-5">
-                                            <div className="field has-addons is-expanded">
-                                                <p className="control is-expanded">
-                                                    <input className="input is-large" type="text" placeholder={i18n.t('add_item')} value={name} onChange={(e) => setName(e.target.value)}/>
-                                                </p>
-                                                <div className="control">
-                                                    <button type="submit" className="button is-success is-large" title={i18n.t('add_item')}>
-                                                        <i className="fa fa-plus"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                )}
-                            </Spring>
-                            
-                        </>
-                        )}
-                        {list && <Calculator/>}
-                        { list && 
-                            items.map((item) => {
-                                return <Spring
-                                from={{opacity: 0}}
-                                to={{opacity: 1}}
-                                config={{duration: 700, delay:200}}
-                                >
-                                {props => (
-                                    <div style={props} className="mb-5">
-                                        <Item key={item.id} list={list} item={item} items={items} setItems={setItems}/>
-                                    </div>
-                                )}
-                            </Spring>
-                            })
-                        }
-                    </section>
-                </div>
-                <div className={`modal ${isModal ? 'is-active' : ''}`}>
-                    <div className="modal-background" onClick={() => {setIsModal(null)}}></div>
-                    <div className="modal-content box is-rounded has-background-dark py-5 px-5 has-text-centered">
-                        {isModal==='addList' && 
-                        <Spring
-                            from={{opacity: 0}}
-                            to={{opacity: 1}}
-                            config={{duration: 700}}
-                        >
-                            {props => (
-                                <div style={props}>
-                                    <AddList lists={lists} setLists={setLists} modal={setIsModal}/>
-                                </div>
-                            )}
-                        </Spring>
+                        /> < /
+                        p > <
+                        div className = "control" >
+                        <
+                        button type = "submit"
+                        className = "button is-success is-large"
+                        title = { i18n.t('add_item') } >
+                        <
+                        i className = "fa fa-plus" > < /i> < /
+                        button > <
+                        /div> < /
+                        div > <
+                        /form> < /
+                        div >
+                    )
+                } <
+                /Spring>
+
+                <
+                />
+            )
+        } { list && < Calculator / > } {
+            list &&
+                items.map((item) => {
+                    return <Spring
+                    from = {
+                        { opacity: 0 }
                     }
-                    </div>
-                </div>
-            </main>
-        </>
+                    to = {
+                        { opacity: 1 }
+                    }
+                    config = {
+                            { duration: 700, delay: 200 }
+                        } > {
+                            props => ( <
+                                div style = { props }
+                                className = "mb-5" >
+                                <
+                                Item key = { item.id }
+                                list = { list }
+                                item = { item }
+                                items = { items }
+                                setItems = { setItems }
+                                /> < /
+                                div >
+                            )
+                        } <
+                        /Spring>
+                })
+        } <
+        /section> < /
+        div > <
+        div className = { `modal ${isModal ? 'is-active' : ''}` } >
+        <
+        div className = "modal-background"
+        onClick = {
+            () => { setIsModal(null) }
+        } > < /div> <
+        div className = "modal-content box is-rounded has-background-dark py-5 px-5 has-text-centered" > {
+            isModal === 'addList' &&
+            <
+            Spring
+            from = {
+                { opacity: 0 }
+            }
+            to = {
+                { opacity: 1 }
+            }
+            config = {
+                { duration: 700 }
+            } > {
+                props => ( <
+                    div style = { props } >
+                    <
+                    AddList lists = { lists }
+                    setLists = { setLists }
+                    modal = { setIsModal }
+                    /> < /
+                    div >
+                )
+            } <
+            /Spring>
+        } <
+        /div> < /
+        div > <
+        /main> < /
+        >
     )
 }
 
