@@ -18,10 +18,14 @@ function Login() {
         setIsPending(true);
         axios.post('auth/login', data).then(
             response => {
+                console.log('test')
                 if (response.statusText === 'OK') {
                     authContext.setIsAuth(true);
+                    console.log('test')
                     authContext.setUsername(response.data.user.name);
+                    console.log('test')
                     localStorage.setItem('remember', true);
+                    console.log('test')
                     toast.success(response.data.message)
                     console.log('test')
                     return <Redirect to = "/home" / >
@@ -54,10 +58,10 @@ function Login() {
         <
         span className = "icon is-left" >
         <
-        i className = "fas fa-envelope" > < /i> <
-        /span> <
-        /p> <
-        /div> <
+        i className = "fas fa-envelope" > < /i> < /
+        span > <
+        /p> < /
+        div > <
         div className = "field" >
         <
         p className = "control has-icons-left" >
@@ -71,15 +75,15 @@ function Login() {
         <
         span className = "icon is-left" >
         <
-        i className = "fas fa-lock" > < /i> <
-        /span> <
-        /p> <
-        /div> <
+        i className = "fas fa-lock" > < /i> < /
+        span > <
+        /p> < /
+        div > <
         div className = "field" >
         <
         button className = { `button is-success is-medium mt-3 ${isPending ? 'is-loading' : ''}` } > { i18n.t('login_button') } <
-        /button> <
-        /div> <
+        /button> < /
+        div > <
         /form>
     )
 }
