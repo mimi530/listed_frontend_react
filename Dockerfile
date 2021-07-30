@@ -1,5 +1,5 @@
 FROM node:alpine
-WORKDIR '/app/frontend'
+WORKDIR '/app'
 COPY package.json .
 COPY package-lock.json .
 RUN npm install
