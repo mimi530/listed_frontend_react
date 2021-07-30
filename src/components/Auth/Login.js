@@ -18,17 +18,11 @@ function Login() {
         setIsPending(true);
         axios.post('auth/login', data).then(
             response => {
-                console.log('test')
-                console.log(response)
                 if (response.status === 200) {
                     authContext.setIsAuth(true);
-                    console.log('test')
                     authContext.setUsername(response.data.user.name);
-                    console.log('test')
                     localStorage.setItem('remember', true);
-                    console.log('test')
                     toast.success(response.data.message)
-                    console.log('test')
                     return <Redirect to = "/home" / >
                 }
             }
