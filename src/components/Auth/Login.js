@@ -20,7 +20,7 @@ function Login() {
             response => {
                 console.log('test')
                 console.log(response)
-                if (response.statusText === 'OK') {
+                if (response.status === 200) {
                     authContext.setIsAuth(true);
                     console.log('test')
                     authContext.setUsername(response.data.user.name);
