@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import i18n from '../../i18n';
 import { AuthContext } from '../Auth/AuthContext';
 
-export default function Item({ list, item, items, setItems }) {
+export default function Item({list, item, items, setItems}) {
 
     const [checked, setChecked] = useState(item.bought);
     const [editMode, setEditMode] = useState(false);
@@ -21,12 +21,12 @@ export default function Item({ list, item, items, setItems }) {
         };
         let newItems = items.filter((olditem) => olditem.id !== item.id);
         item.bought = !item.bought;
-        if (item.bought) {
+        if(item.bought) {
             setItems([...newItems, item])
         } else {
             setItems([item, ...newItems])
         }
-        axios.patch('lists/' + list.id + '/items/' + item.id, data).catch(
+        axios.patch('lists/'+list.id+'/items/'+item.id, data).catch(
             error => {
                 toast.error(error.response.data.message)
             }
@@ -42,7 +42,7 @@ export default function Item({ list, item, items, setItems }) {
         setIsPending(true);
         axios.put(`lists/${list.id}/items/${item.id}`, data).then(
             response => {
-                if (response.status === 200) {
+                if(response.status === 200) {
                     let newItems = items.filter((olditem) => olditem.id !== response.data.item.id);
                     toast.success(response.data.message)
                     setIsPending(false)
@@ -58,10 +58,10 @@ export default function Item({ list, item, items, setItems }) {
     }
 
     const handleItemDelete = () => {
-        if (window.confirm(i18n.t('confirm-delete'))) {
+        if(window.confirm(i18n.t('confirm-delete'))) {
             axios.delete(`lists/${list.id}/items/${item.id}`).then(
                 response => {
-                    if (response.status === 200) {
+                    if(response.status === 200) {
                         toast.success(response.data.message)
                         let newItems = items.filter((olditem) => olditem.id !== item.id);
                         setItems(newItems)
@@ -72,97 +72,71 @@ export default function Item({ list, item, items, setItems }) {
                     toast.error(error.response.data.message)
                 }
             )
-
+            
         }
     }
-
-    return ( <
-            div className = "box has-background-dark" >
-            <
-            p className = "has-text-grey is-size-6" >
-            @ { item.user.name } <
-            /p> <
-            div className = "is-flex is-justify-content-space-between is-align-items-flex-end" > {!editMode ? ( <
-                    h1 className = "subtitle has-text-weight-bold has-text-white is-size-3 mb-0"
-                    style = {!item.bought ? {} : { textDecoration: 'line-through' } } > { item.name } <
-                    /h1>
-                ) : ( <
-                    form onSubmit = { handleItemUpdate } >
-                    <
-                    div className = "field is-horizontal has-addons has-addons-centered" >
-                    <
-                    p className = "control" >
-                    <
-                    button className = "button is-danger"
-                    onClick = {
-                        () => setEditMode(false)
-                    } >
-                    <
-                    i className = "fa fa-times" > < /i> < /
-                    button > <
-                    /p> <
-                    p className = { `control ${isPending ? 'is-loading' : ''}` } >
-                    <
-                    input value = { name }
-                    onChange = {
-                        (e) => setName(e.target.value)
+    
+    return (
+        <div className="box has-background-dark">
+            <p className="has-text-grey is-size-6">
+                @{item.user.name}
+            </p>
+            <div className="is-flex is-justify-content-space-between is-align-items-flex-end">
+                {!editMode ? (
+                    <h1 className="subtitle has-text-weight-bold has-text-white is-size-3 mb-0" style={!item.bought ? {} : {textDecoration: 'line-through'}}> 
+                        {item.name}
+                    </h1>
+                ): (
+                    <form onSubmit={handleItemUpdate}>
+                        <div className="field is-horizontal has-addons has-addons-centered">
+                            <p className="control">
+                                <button className="button is-danger" onClick={() => setEditMode(false)}>
+                                    <i className="fa fa-times"></i>
+                                </button>
+                            </p>
+                            <p className={`control ${isPending ? 'is-loading' : ''}`}>
+                                <input 
+                                    value={name} 
+                                    onChange={(e) => setName(e.target.value)} 
+                                    name="name" 
+                                    className="input is-size-6 has-text-weight-bold subtitle" 
+                                    autoFocus
+                                />
+                            </p>
+                            <p className="control">
+                                <input 
+                                    defaultValue={description} 
+                                    onChange={(e) => setDescription(e.target.value)} 
+                                    name="description" 
+                                    className="input is-size-6 has-text-weight-bold subtitle"
+                                    placeholder={i18n.t('description')}
+                                />
+                            </p>
+                            <p className="control">
+                                <button type="submit" className={`button is-success ${isPending ? 'is-loading' : ''}`}>
+                                    <i className="fa fa-check"></i>
+                                </button>
+                            </p>
+                        </div>
+                    </form>
+                )}
+                <div>
+                    {
+                        checked ? (
+                            <i className="fa fa-check-square is-size-1 has-text-grey click-dark is-clickable" onClick={() => handleCheckbox(item)}></i>
+                        ): (
+                            <i className="far fa-check-square is-size-1 has-text-light click-dark is-clickable" onClick={() => handleCheckbox(item)}></i>
+                        )
                     }
-                    name = "name"
-                    className = "input is-size-6 has-text-weight-bold subtitle"
-                    autoFocus /
-                    >
-                    <
-                    /p> <
-                    p className = "control" >
-                    <
-                    input defaultValue = { description }
-                    onChange = {
-                        (e) => setDescription(e.target.value)
-                    }
-                    name = "description"
-                    className = "input is-size-6 has-text-weight-bold subtitle"
-                    placeholder = { i18n.t('description') }
-                    /> < /
-                    p > <
-                    p className = "control" >
-                    <
-                    button type = "submit"
-                    className = { `button is-success ${isPending ? 'is-loading' : ''}` } >
-                    <
-                    i className = "fa fa-check" > < /i> < /
-                    button > <
-                    /p> < /
-                    div > <
-                    /form>
-                )
-            } <
-            div > {
-                checked ? ( <
-                    i className = "fa fa-check-square is-size-1 has-text-grey click-dark is-clickable"
-                    onClick = {
-                        () => handleCheckbox(item)
-                    } > < /i>
-                ) : ( <
-                    i className = "far fa-check-square is-size-1 has-text-light click-dark is-clickable"
-                    onClick = {
-                        () => handleCheckbox(item)
-                    } > < /i>
-                )
-            } <
-            /div> < /
-            div > <
-            p className = "has-text-grey is-size-5 mb-3" > { item.description } < /p> {
-            item.user.name === authContext.username && !editMode &&
-            <
-            >
-            <
-            i className = "fa fa-edit fa-lg has-text-info click-dark ml-3 mr-5 is-clickable"
-            onClick = {
-                () => setEditMode(true)
-            } > < /i> <
-            i className = "fa fa-trash fa-lg fa- has-text-danger click-dark is-clickable"
-            onClick = { handleItemDelete } > < /i> < / >
-        } <
-        /div>
-)
+                </div>
+            </div>
+			<p className="has-text-grey is-size-5 mb-3">{ item.description }</p>
+            {item.user.name === authContext.username && !editMode &&
+            <>
+                <i className="fa fa-edit fa-lg has-text-info click-dark ml-3 mr-5 is-clickable" onClick={() => setEditMode(true)}></i>
+                <i className="fa fa-trash fa-lg fa- has-text-danger click-dark is-clickable" onClick={handleItemDelete}></i>
+            </>
+            }
+        </div>
+    )
 }
