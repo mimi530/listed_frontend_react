@@ -8,6 +8,7 @@ services:
             - 80
         environment: 
             VIRTUAL_HOST: listed.mdomzalski.pl,www.listed.mdomzalski.pl
+            LETSENCRYPT_HOST: listed.mdomzalski.pl,www.listed.mdomzalski.pl
         container_name: listed
 networks:
     default:
