@@ -1,16 +1,24 @@
-version: '3.7'
+version: '3'
 services:
-    listed:
-        build:
-            context: ./
-            dockerfile: Dockerfile.prod
-        expose: 
-            - 80
-        environment: 
-            VIRTUAL_HOST: listed.mdomzalski.pl,www.listed.mdomzalski.pl
-            LETSENCRYPT_HOST: listed.mdomzalski.pl,www.listed.mdomzalski.pl
-        container_name: listed
+  listed:
+    restart: always
+    build:
+      context: ./
+      dockerfile: Dockerfile.prod
+    expose:
+      - 80
+    container_name: listed.mdomzalski.pl
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.listed.rule=Host(`listed.mdomzalski.pl`,`www.listed.mdomzalski.pl`)"
+      - "traefik.http.routers.listed.entrypoints=websecure"
+      - "traefik.http.routers.listed.tls.certresolver=production"
+      - "traefik.http.routers.listed-https.tls=true"
+      - "traefik.http.routers.listed-https.rule=Host(`listed.mdomzalski.pl`,`www.listed.mdomzalski.pl`)"
+      - "traefik.http.routers.listed-https.entrypoints=websecure"
+      - "traefik.http.routers.listed-https.service=listed"
+      - "traefik.http.services.listed.loadbalancer.server.port=80"
 networks:
-    default:
-        external:
-            name: nginx-proxy
+  default:
+    name: traefik
+    external: true
