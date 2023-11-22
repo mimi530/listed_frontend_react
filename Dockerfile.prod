@@ -1,9 +1,12 @@
-FROM node:alpine
+FROM node:20 AS build
 WORKDIR '/app'
-COPY package.json .
-COPY package-lock.json .
-RUN npm install
+COPY package.json package-lock.json ./
+RUN npm ci
 COPY . .
-RUN npm install -g serve
 RUN npm run build
-CMD ["serve","-p", "80", "-s", "build"]
+
+FROM nginx:latest
+WORKDIR /usr/share/nginx/html
+RUN rm -rf ./*
+COPY --from=build /app/dist .
+ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
